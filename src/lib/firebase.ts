@@ -4,15 +4,14 @@ import { getFirestore } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
+// Your web app's Firebase configuration using Environment Variables
 const firebaseConfig = {
-  "projectId": "boymo-business",
-  "appId": "1:1024962260170:web:abc609fe8864488b021833",
-  "storageBucket": "boymo-business.firebasestorage.app",
-  "apiKey": "AIzaSyCOxScddr_rVnwhZkO73Rz98kddFb2bdLM",
-  "authDomain": "boymo-business.firebaseapp.com",
-  "measurementId": "",
-  "messagingSenderId": "1024962260170"
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
 };
 
 // Initialize Firebase
