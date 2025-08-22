@@ -11,6 +11,9 @@ import { subDays, startOfDay, endOfDay } from 'date-fns';
 // ====== Income Actions ======
 
 export async function addIncome(formData: Omit<Income, 'id' | 'createdAt' >) {
+  if (!db) {
+    return { success: false, error: "Firebase is not configured." };
+  }
   try {
     const newIncome = {
       ...formData,
@@ -28,6 +31,7 @@ export async function addIncome(formData: Omit<Income, 'id' | 'createdAt' >) {
 }
 
 export async function getIncomes(): Promise<Income[]> {
+    if (!db) return [];
     try {
         const q = query(collection(db, 'incomes'), orderBy('createdAt', 'desc'));
         const querySnapshot = await getDocs(q);
@@ -39,6 +43,9 @@ export async function getIncomes(): Promise<Income[]> {
 }
 
 export async function deleteIncome(id: string) {
+    if (!db) {
+        return { success: false, error: "Firebase is not configured." };
+    }
     try {
         const q = query(collection(db, 'incomes'), where('id', '==', id));
         const querySnapshot = await getDocs(q);
@@ -60,6 +67,9 @@ export async function deleteIncome(id: string) {
 // ====== Expense Actions ======
 
 export async function addExpense(formData: Omit<Expense, 'id' | 'createdAt'>) {
+    if (!db) {
+        return { success: false, error: "Firebase is not configured." };
+    }
     try {
         const newExpense = {
         ...formData,
@@ -77,6 +87,7 @@ export async function addExpense(formData: Omit<Expense, 'id' | 'createdAt'>) {
 }
 
 export async function getExpenses(): Promise<Expense[]> {
+    if (!db) return [];
     try {
         const q = query(collection(db, 'expenses'), orderBy('createdAt', 'desc'));
         const querySnapshot = await getDocs(q);
@@ -88,6 +99,9 @@ export async function getExpenses(): Promise<Expense[]> {
 }
 
 export async function deleteExpense(id: string) {
+    if (!db) {
+        return { success: false, error: "Firebase is not configured." };
+    }
     try {
         const q = query(collection(db, 'expenses'), where('id', '==', id));
         const querySnapshot = await getDocs(q);
@@ -109,6 +123,7 @@ export async function deleteExpense(id: string) {
 // ====== Transaction Actions ======
 
 export async function getRecentTransactions(): Promise<Transaction[]> {
+    if (!db) return [];
     const incomes = (await getIncomes()).map(i => ({ ...i, txType: 'income' as const }));
     const expenses = (await getExpenses()).map(e => ({ ...e, txType: 'expense' as const }));
 
@@ -120,6 +135,13 @@ export async function getRecentTransactions(): Promise<Transaction[]> {
 
 
 export async function getTodaySummary() {
+    if (!db) {
+        return {
+            todayIncome: 0,
+            todayExpense: 0,
+            todayProfit: 0,
+        };
+    }
     const todayStart = startOfDay(new Date()).toISOString();
     
     const incomesSnapshot = await getDocs(query(collection(db, 'incomes'), where('date', '>=', todayStart)));
